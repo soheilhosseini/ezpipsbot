@@ -1,5 +1,4 @@
 const TelegramBot = require('node-telegram-bot-api');
-const isValidUser = require('../src/isValidUser')
 const users = require('../models/users')
 const analyzes = require('../models/analyzes');
 const subjects = require('../models/subjects');
