@@ -330,6 +330,7 @@ ${analyze[0].takeprofit ? analyze[0].takeprofit > analyze[0].stoploss ? '\u{1F53
                     }
                 )
             });
+            
             let watchlistCaption = '#Watchlist #واچلیست\n\nتحلیل انفرادی\n';
             var uniqueSubjects = Array.from(new Set(watchlist.map(item => item.subjectString)))
             for (var i = 0; i < uniqueSubjects.length; i++) {
