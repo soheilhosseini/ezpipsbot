@@ -353,18 +353,42 @@ ${analyze[0].takeprofit ? analyze[0].takeprofit > analyze[0].stoploss ? '\u{1F53
             watchlistCaption = watchlistCaption + `تحلیل گروهی\n`
             var uniqueSubjects = Array.from(new Set(groupAnalyzes.map(item => item.subjectString)))
             for (var i = 0; i < uniqueSubjects.length; i++) {
-                watchlistCaption = watchlistCaption + `\u{2705} \#${uniqueSubjects[i]}  --------------------\n`
+                watchlistCaption = watchlistCaption + `\u{2705} #${uniqueSubjects[i]}  --------------------\n`
                 for (var j = 0; j < groupAnalyzes.length; j++) {
                     if (groupAnalyzes[j].subjectString === uniqueSubjects[i]) {
-                        watchlistCaption = watchlistCaption + `\#${groupAnalyzes[j].creatorUsername} ${groupAnalyzes[j].isGroup}${groupAnalyzes[j].takeprofit ? groupAnalyzes[j].stoploss < groupAnalyzes[j].takeprofit ?
+                        watchlistCaption = watchlistCaption + `#${groupAnalyzes[j].creatorUsername} ${groupAnalyzes[j].isGroup}${groupAnalyzes[j].takeprofit ? groupAnalyzes[j].stoploss < groupAnalyzes[j].takeprofit ?
                             '\n\u{1F535} Long' : '\n\u{1F534} Short' : ''}      ${groupAnalyzes[j].takeprofit ? "Open At: " + groupAnalyzes[j].entrypoint : ''}   ${groupAnalyzes[j].takeprofit ? "StopLoss: " + groupAnalyzes[j].stoploss : ''}   ${groupAnalyzes[j].takeprofit ? "TakeProfit: " + groupAnalyzes[j].takeprofit : ''}\n${groupAnalyzes[j].messageURL}\n\n`
                     }
                 }
             }
 
-            watchlistCaption = watchlistCaption.replace('#' , '\#');
 
-            console.log(watchlistCaption)
+            watchlistCaption = (watchlistCaption).split('').map(char =>{
+
+                switch (char){
+                    case '_':
+                    case '*':
+                    case '[':
+                    case ']':
+                    case '(':
+                    case ')':
+                    case '~':
+                    case '`':
+                    case '>':
+                    case '#':
+                    case '+':
+                    case '-':
+                    case '=':
+                    case '|':
+                    case '{':
+                    case '}':
+                    case '.':
+                    case '!':
+                        return '\\' + `${char}`
+                    default: return char
+                        
+                }
+            }).join('')
 
             bot.editMessageText(watchlistCaption, {
                 'chat_id': watchlistMessageProperties.chatId,
@@ -394,7 +418,7 @@ ${analyze[0].takeprofit ? analyze[0].takeprofit > analyze[0].stoploss ? '\u{1F53
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     else if (action.split('/')[0] === 'invalid') {
-        const deciveMessage =  'یوزرنیم معرف خود را با ریپلای به این پیام وارد کنید.'
+        const deciveMessage = 'یوزرنیم معرف خود را با ریپلای به این پیام وارد کنید.'
         var dataArray = action.split('/')
         users.findOne({ _id: dataArray[1] }, async (err, user) => {
             if (!user) {
@@ -402,9 +426,9 @@ ${analyze[0].takeprofit ? analyze[0].takeprofit > analyze[0].stoploss ? '\u{1F53
                 await user.save()
                 console.log(dataArray[3] + ' is added to bot as a invalid user')
                 // return bot.sendMessage((dataArray[1]), errorMessage)
-                return bot.sendMessage((dataArray[1]),deciveMessage).then(sentMessage => {
+                return bot.sendMessage((dataArray[1]), deciveMessage).then(sentMessage => {
                     bot.onReplyToMessage(sentMessage.chat.id, sentMessage.message_id, reply => {
-                        bot.sendMessage(fadinTorkfarId , dataArray[3] + ' introduced (invalid user): ' + reply.text);
+                        bot.sendMessage(fadinTorkfarId, dataArray[3] + ' introduced (invalid user): ' + reply.text);
                         console.log(dataArray[3] + ' introduced (invalid user): ' + reply.text)
                     })
                 })
@@ -412,9 +436,9 @@ ${analyze[0].takeprofit ? analyze[0].takeprofit > analyze[0].stoploss ? '\u{1F53
                 await users.updateOne({ _id: sanitize(dataArray[1]) }, { isValid: false }, (err, result) => { })
                 // return bot.sendMessage((dataArray[1]), errorMessage)
                 console.log(dataArray[3] + ' is added to bot as a invalid user')
-                return bot.sendMessage((dataArray[1]),deciveMessage).then(sentMessage => {
+                return bot.sendMessage((dataArray[1]), deciveMessage).then(sentMessage => {
                     bot.onReplyToMessage(sentMessage.chat.id, sentMessage.message_id, reply => {
-                        bot.sendMessage(fadinTorkfarId , dataArray[3] + ' introduced (invalid user): ' + reply.text);
+                        bot.sendMessage(fadinTorkfarId, dataArray[3] + ' introduced (invalid user): ' + reply.text);
                         console.log(dataArray[3] + ' introduced (invalid user): ' + reply.text)
                     })
                 })
